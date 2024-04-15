@@ -17,29 +17,31 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int num = 3;
+
+  int num = 1;
+
+  void increase() {
+    num ++;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    print("나 그려졌음");
     return Container(
       color: Colors.yellow,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Text("${num}"),
-            TextButton(onPressed: () {
-              num++;
-              print("num : ${num}");
-              setState(() {});  // rebuild
-            }, child: Text("증가")),
+            Expanded(child: HeaderPage(num)),       // 상태 전달
+            Expanded(child: BottomPage(increase)),  // 행위 전달
           ],
         ),
       ),
@@ -48,7 +50,10 @@ class _HomePageState extends State<HomePage> {
 }
 
 class HeaderPage extends StatelessWidget {
-  HeaderPage();
+
+  int num;
+
+  HeaderPage(this.num);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +61,7 @@ class HeaderPage extends StatelessWidget {
       color: Colors.red,
       child: Align(
         child: Text(
-          "1",
+          "${num}",
           style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -69,7 +74,10 @@ class HeaderPage extends StatelessWidget {
 }
 
 class BottomPage extends StatelessWidget {
-  BottomPage();
+
+  Function increase;
+
+  BottomPage(this.increase);
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +88,7 @@ class BottomPage extends StatelessWidget {
           style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
           onPressed: () {
             print("버튼 클릭됨");
+            increase();
           },
           child: Text(
             "증가",
